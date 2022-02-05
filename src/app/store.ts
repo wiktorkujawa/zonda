@@ -1,9 +1,9 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import todoReducer from '../features/todos';
+import orderbookReducer from '../features/orderbook';
 
 export const store = configureStore({
   reducer: {
-    todos: todoReducer,
+    orderbook: orderbookReducer,
   },
 });
 

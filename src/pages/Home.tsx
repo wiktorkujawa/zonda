@@ -1,21 +1,28 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { getTodos, selectTodos } from '../features/todos';
+import { getOrderbook, selectOrderbook, selectError } from '../features/orderbook';
 
 type Props = {};
 
 const Home = (props: Props) => {
   const dispatch = useAppDispatch()
-  const todos = useAppSelector(selectTodos);
+  const todos = useAppSelector(selectOrderbook);
+  const errors = useAppSelector(selectError);
+
+  console.log(todos ? todos: errors)
   useEffect(() => {
     const interval = setInterval(() => 
-      dispatch(getTodos({trading_pair: 'BTC-PLN', limit: 10})),1000)
+      dispatch(getOrderbook({trading_pair: 'BTC-PLN', limit: 10})),1000)
       return () => clearInterval(interval)
   },[dispatch])
   return <ul>
     {
-      todos.sell?.map( (todo: any, index: number) => {
-        return <li key={index}> {todo.ra}</li>
+      todos && todos?.sell ?
+      todos.sell?.map( ( item: any, index: number) => {
+        return <li key={index}> {item.ra}</li>
+      }):
+      errors.map( (error: string,index: number) => {
+        return <li key={index}> { error }</li>
       })
     }
     

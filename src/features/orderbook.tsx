@@ -8,7 +8,7 @@ export interface TodoState {
   errors: string[]
 }
 
-export const getTodos = createAsyncThunk(
+export const getOrderbook = createAsyncThunk(
   'GET_TODOS',
   async (params: OrderbookParams, { rejectWithValue }) => {
     const { limit, trading_pair } = params;
@@ -28,21 +28,21 @@ const initialState: TodoState = {
   errors: []
 };
 
-const todoSlice = createSlice({
-  name: 'todo',
+const orderbookSlice = createSlice({
+  name: 'orderbook',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
 
     // GET REDUCERS
-    builder.addCase(getTodos.pending, (state: TodoState, _action) => {
+    builder.addCase(getOrderbook.pending, (state: TodoState, _action) => {
       state.loading = "PENDING"
     })
-    .addCase(getTodos.fulfilled, (state: TodoState, action) => {
+    .addCase(getOrderbook.fulfilled, (state: TodoState, action) => {
       state.loading = "FULFILLED"
       state.data = action.payload
     })
-    .addCase(getTodos.rejected, (state: TodoState, action: any) => {
+    .addCase(getOrderbook.rejected, (state: TodoState, action: any) => {
       state.loading = "REJECTED"
       state.errors = action.payload
       state.data = {}
@@ -51,6 +51,8 @@ const todoSlice = createSlice({
 
 })
 
-export const selectTodos = (state: RootState) => state.todos.data
+export const selectOrderbook = (state: RootState) => state.orderbook.data
 
-export default todoSlice.reducer
+export const selectError = (state: RootState) => state.orderbook.errors
+
+export default orderbookSlice.reducer
