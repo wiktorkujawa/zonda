@@ -9,13 +9,13 @@ const Home = (props: Props) => {
   const todos = useAppSelector(selectTodos);
   useEffect(() => {
     const interval = setInterval(() => 
-      dispatch(getTodos()),1000)
+      dispatch(getTodos({trading_pair: 'BTC-PLN', limit: 10})),1000)
       return () => clearInterval(interval)
   },[dispatch])
   return <ul>
     {
-      todos.map( (todo: any) => {
-        return <li key={todo.todo}> {todo.todo}</li>
+      todos.sell?.map( (todo: any, index: number) => {
+        return <li key={index}> {todo.ra}</li>
       })
     }
     

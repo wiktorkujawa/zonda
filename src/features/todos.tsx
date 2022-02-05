@@ -1,43 +1,31 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-
+import axios from 'axios';
+import { OrderbookParams, ResponseDetails } from '../models';
 export interface TodoState {
-  loading: any
-  data: []
+  loading: "IDLE" | "PENDING" | "FULFILLED" | "REJECTED",
+  data: ResponseDetails,
+  errors: string[]
 }
 
 export const getTodos = createAsyncThunk(
   'GET_TODOS',
-  async () => {
-    // Example: 
-    // const {data} = await axios.get('/api/todos')
-    const data: any = [{todo: 'Your Data'}]
-    return data
-  }
-)
-
-export const addTodos = createAsyncThunk(
-  'ADD_TODOS',
-  async (body:any) => {
-    // Example: 
-    // const {data} = await axios.post('/api/todos',  body )
-    const data = {todo: 'Your Data'}
-    return data
-  }
-)
-
-export const deleteTodos = createAsyncThunk(
-  'DELETE_TODOS',
-  async (id:number) => {
-    // Example: 
-    // await axios.delete(`/api/todos/${id}`)
-    return id
+  async (params: OrderbookParams, { rejectWithValue }) => {
+    const { limit, trading_pair } = params;
+    try {
+      const { data } = await axios.get(`/api/orderbook/${trading_pair}/${limit}`)
+      return data
+    }
+    catch(e: any) {
+      return rejectWithValue(e.response.data)
+    }    
   }
 )
 
 const initialState: TodoState = {
-  loading: null,
-  data: []
+  loading: 'IDLE',
+  data: {},
+  errors: []
 };
 
 const todoSlice = createSlice({
@@ -47,42 +35,18 @@ const todoSlice = createSlice({
   extraReducers: (builder) => {
 
     // GET REDUCERS
-    builder.addCase(getTodos.pending, (state, action) => {
+    builder.addCase(getTodos.pending, (state: TodoState, _action) => {
       state.loading = "PENDING"
     })
-    builder.addCase(getTodos.fulfilled, (state, action) => {
+    .addCase(getTodos.fulfilled, (state: TodoState, action) => {
       state.loading = "FULFILLED"
       state.data = action.payload
     })
-    builder.addCase(getTodos.rejected, (state, action) => {
+    .addCase(getTodos.rejected, (state: TodoState, action: any) => {
       state.loading = "REJECTED"
+      state.errors = action.payload
+      state.data = {}
     })
-
-    // ADD REDUCERS
-    builder.addCase(addTodos.pending, (state, action) => {
-      state.loading = "PENDING"
-    })
-    builder.addCase(addTodos.fulfilled, (state: any, action: any) => {
-      state.loading = "FULFILLED"
-      state.data.push(action.payload)
-    })
-    builder.addCase(addTodos.rejected, (state, action) => {
-      state.loading = "REJECTED"
-    })
-
-
-    // DELETE REDUCERS
-    builder.addCase(deleteTodos.pending, (state, action) => {
-      state.loading = "PENDING"
-    })
-    builder.addCase(deleteTodos.fulfilled, (state: any, action: any) => {
-      state.loading = "FULFILLED"
-      state.data = state.data.filter((todo:any) => todo.id !== action.payload)
-    })
-    builder.addCase(deleteTodos.rejected, (state, action) => {
-      state.loading = "REJECTED"
-    })
-
   }
 
 })
