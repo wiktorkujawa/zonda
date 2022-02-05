@@ -6,7 +6,12 @@ module.exports = {
     './src/App.tsx'
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'pale-green': '#eefafa',
+        'grass-green': '#5fbd58'
+      }
+    },
   },
   plugins: [],
 }

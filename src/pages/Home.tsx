@@ -8,8 +8,7 @@ const Home = (props: Props) => {
   const dispatch = useAppDispatch()
   const todos = useAppSelector(selectOrderbook);
   const errors = useAppSelector(selectError);
-
-  console.log(todos ? todos: errors)
+  
   useEffect(() => {
     const interval = setInterval(() => 
       dispatch(getOrderbook({trading_pair: 'BTC-PLN', limit: 10})),1000)
