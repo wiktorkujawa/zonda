@@ -4,16 +4,18 @@ export interface OrderbookParams {
 }
 
 export interface SellBuyDetails {
-  ra: string ,
-  ca: string,
-  sa: string,
-  pa: string,
-  co: number
+  ra: number ,
+  ca: number,
+  sa: number,
+  pa: number,
+  co: number,
+  val: number
 }
 
 export interface ResponseDetails {
   sell?: SellBuyDetails[],
   buy?: SellBuyDetails[],
+  spread?: number
   status?: "Ok" | "Fail",
   timestamp?: string,
   seqNo?: string
