@@ -11,6 +11,7 @@ import CHeader from './components/organisms/CHeader';
 import { ReactComponent as MenuIcon} from './assets/icons/menu.svg'
 import CNavMenu from './components/organisms/CNavMenu';
 import CFooter from './components/organisms/CFooter';
+import About from './pages/About';
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
         <div className='h-16'/> 
           <Routes>
             <Route path="/" element={ <Home/> }/>
+            <Route path="about" element={ <About/> }/>
           </Routes>
           <div className='h-10'/>
         </main>

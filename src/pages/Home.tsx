@@ -52,8 +52,6 @@ const Home = (props: Props) => {
           onBlur={formik.handleBlur}
           style={{ display: 'block' }}
         >
-          {/* <option value={""} label="Select tradingpair" /> */}
-
           {
             trading_pair_options.map( option => <option key={option} value={option} label={option} /> )
           }
@@ -74,7 +72,6 @@ const Home = (props: Props) => {
           onBlur={formik.handleBlur}
           style={{ display: 'block' }}
         >
-          {/* <option value={""} label="Select a limit" /> */}
           <option value={10} label="10" />
           <option value={50} label="50" />
           <option value={100} label="100" />
@@ -151,15 +148,6 @@ const Home = (props: Props) => {
     </div> :  errors.map( (error: string,index: number) => {
               return <h2 className='text-center mt-5' key={index}> { error }</h2>
             })}
-    {/* {
-      orders && orders?.sell ?
-      orders.sell?.map( ( order: any, index: number) => {
-        return <div key={index}> {order.ra}</div>
-      }):
-      errors.map( (error: string,index: number) => {
-        return <div key={index}> { error }</div>
-      })
-    } */}
     
     </section>;
 };
