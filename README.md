@@ -1,7 +1,13 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+# Zonda app
 
-## Available Scripts
+## About
+App diplays api data from: https://api.zonda.exchange/rest/trading/orderbook-limited/
+Docs are here: https://docs.zonda.exchange/v1.0.4-en/reference/orderbook-limited
+Used tech:
+- backend: nodejs, typescript, express, axios
+- frontend: React, redux, tailwind
 
+## Scripts usage
 In the project directory, you can run:
 
 ### `npm start`
@@ -17,15 +23,16 @@ You will also see any lint errors in the console.
 Launches the test runner in the interactive watch mode.<br />
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
+### `npm run watch`
+
+You can watch server build while making changes
+
+### `npm run dev`
+You can watch server from localhost:4000 and client on localhost:3000 without building frontend, server build required( run npm watch or npm build to build server before)
+
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Builds react-scripts app and move it to dist folder, than the server is build and saved in dist folder.
 
 ### `npm run eject`
 
@@ -37,8 +44,6 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+## Deployment
+Page is deployed on https://zonda-app.herokuapp.com/
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
