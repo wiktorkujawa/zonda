@@ -1,7 +1,8 @@
 import { useFormik } from 'formik';
 import React, { useEffect } from 'react';
+import { io } from 'socket.io-client';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { getOrderbook, selectOrderbook, selectError } from '../features/orderbook';
+import { getOrderbook, selectOrderbook } from '../features/orderbook';
 import { OrderbookParams, SellBuyDetails } from '../models';
 
 type Props = {};
@@ -23,18 +24,21 @@ const trading_pair_options: string[] = [
 const Home = (props: Props) => {
   const dispatch = useAppDispatch()
   const orders = useAppSelector(selectOrderbook);
-  const errors = useAppSelector(selectError);
   const formik = useFormik({
     initialValues: initialValues,
     onSubmit: () => {}
   });
-  useEffect(() => {
-    
-    const interval = setInterval(() => {
-        dispatch(getOrderbook({trading_pair: formik.values.trading_pair, limit: formik.values.limit}))
-    }
-      ,1000)
-      return () => clearInterval(interval)
+  useEffect((): any => {
+
+    const socket = io({ query: {
+      'limit': formik.values.limit,
+      'trading_pair': formik.values.trading_pair
+    }});
+
+    socket.on("FromAPI", data => {
+      dispatch(getOrderbook(data))
+    });
+    return () => socket.disconnect();
   },[dispatch, formik.values])
 
   const roundNumber = (number: number) => parseFloat(Number(number).toFixed(4))
@@ -82,7 +86,7 @@ const Home = (props: Props) => {
     </form>
 
   {
-    orders && orders?.buy ?
+    orders.status==='Ok' ?
     <div className='flex flex-col justify-center md:flex-row'>
       <div className='w-full text-center border-x-2'>
         <h2 className='w-full font-bold'>Ask</h2>
@@ -94,7 +98,6 @@ const Home = (props: Props) => {
           <div className='border-2 border-r-0 flex justify-center items-center'>Offers number</div>
         </div>
         {
-          orders && orders?.buy ? 
             orders.buy?.map((order: SellBuyDetails, index: number) => {
               return <div key={index} className='w-full grid grid-cols-4'>
                 <div className='border-2 border-l-0 text-center'>
@@ -110,7 +113,7 @@ const Home = (props: Props) => {
                   {order.co}
                 </div>
               </div>
-          }): null
+          })
         }
        </div>  
 
@@ -125,7 +128,6 @@ const Home = (props: Props) => {
         </div>
 
         {
-          orders && orders?.sell ? 
             orders.sell?.map((order: SellBuyDetails, index: number) => {
               return <div key={index} className='w-full grid grid-cols-4'>
                 <div className='border-2 border-l-0 text-center'>
@@ -141,11 +143,11 @@ const Home = (props: Props) => {
                   {order.co}
                 </div>
               </div>
-          }): null
+          })
     
         }
        </div>  
-    </div> :  errors.map( (error: string,index: number) => {
+    </div> :  orders.errors?.map( (error: string,index: number) => {
               return <h2 className='text-center mt-5' key={index}> { error }</h2>
             })}
     

@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import axios from 'axios';
-import { OrderbookParams, ResponseDetails } from '../models';
+import { ResponseDetails } from '../models';
 export interface TodoState {
   loading: "IDLE" | "PENDING" | "FULFILLED" | "REJECTED",
   data: ResponseDetails,
@@ -10,10 +9,8 @@ export interface TodoState {
 
 export const getOrderbook = createAsyncThunk(
   'GET_ORDERS',
-  async (params: OrderbookParams, { rejectWithValue }) => {
-    const { limit, trading_pair } = params;
+  async (data:ResponseDetails, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`/api/orderbook/${trading_pair}/${limit}`)
       return data
     }
     catch(e: any) {
@@ -40,12 +37,6 @@ const orderbookSlice = createSlice({
     })
     .addCase(getOrderbook.fulfilled, (state: TodoState, action: PayloadAction<ResponseDetails>) => {
       state.loading = "FULFILLED"
-      action.payload.buy!.map(item => item.val= item.ra*item.ca)
-      action.payload.sell!.map(item => item.val= item.ra*item.ca)
-
-      action.payload.spread =  Math.max.apply(Math, action.payload!.sell!.map(order => order.val))
-      -
-      Math.min.apply(Math, action.payload!.buy!.map(order => order.val))
       state.data = action.payload
     })
     .addCase(getOrderbook.rejected, (state: TodoState, action: any) => {
