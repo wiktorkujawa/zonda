@@ -19,7 +19,6 @@ function App() {
   return (
       <Router>
       <CHeader />
-
       <CNavMenu isOpened={isOpened}/>
 
       <button onClick={() => setIsOpened(!isOpened)} className="md:hidden absolute top-4 right-4 w-8"> 
