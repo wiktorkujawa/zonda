@@ -2,8 +2,9 @@ import { useFormik } from 'formik';
 import React, { useEffect } from 'react';
 import { io } from 'socket.io-client';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
+import COrderTable from '../components/organisms/COrderTable';
 import { getOrderbook, selectOrderbook } from '../features/orderbook';
-import { OrderbookParams, SellBuyDetails } from '../models';
+import { OrderbookParams } from '../models';
 
 type Props = {};
 
@@ -85,71 +86,7 @@ const Home = (props: Props) => {
         
     </form>
 
-  {
-    orders.status==='Ok' ?
-    <div className='flex flex-col justify-center md:flex-row'>
-      <div className='w-full text-center border-x-2'>
-        <h2 className='w-full font-bold'>Ask</h2>
-
-        <div className='w-full grid grid-cols-4'>
-          <div className='border-2 border-l-0 flex justify-center items-center'>Rate</div>
-          <div className='border-2 flex justify-center items-center'>Amount of {formik.values.trading_pair.substring(0,3)}</div>
-          <div className='border-2 flex justify-center items-center'>{formik.values.trading_pair.substring(4,7)} value</div>
-          <div className='border-2 border-r-0 flex justify-center items-center'>Offers number</div>
-        </div>
-        {
-            orders.buy?.map((order: SellBuyDetails, index: number) => {
-              return <div key={index} className='w-full grid grid-cols-4'>
-                <div className='border-2 border-l-0 text-center'>
-                  {roundNumber(order.ra)}
-                </div>
-                <div className='border-2 text-center'>
-                  {roundNumber(order.ca)}
-                </div>
-                <div className='border-2 text-center'>
-                  {roundNumber(order.val)}
-                </div>
-                <div className='border-2 border-r-0 text-center'>
-                  {order.co}
-                </div>
-              </div>
-          })
-        }
-       </div>  
-
-      <div className='w-full text-center border-x-2'>
-        <h2 className='w-full font-bold'>Bid</h2>
-
-        <div className='w-full grid grid-cols-4'>
-          <div className='border-2 border-l-0 flex justify-center items-center'>Rate</div>
-          <div className='border-2 flex justify-center items-center'>Amount of {formik.values.trading_pair.substring(0,3)}</div>
-          <div className='border-2 flex justify-center items-center'>{formik.values.trading_pair.substring(4,7)} value</div>
-          <div className='border-2 border-r-0 flex justify-center items-center'>Offers number</div>
-        </div>
-
-        {
-            orders.sell?.map((order: SellBuyDetails, index: number) => {
-              return <div key={index} className='w-full grid grid-cols-4'>
-                <div className='border-2 border-l-0 text-center'>
-                  {roundNumber(order.ra)}
-                </div>
-                <div className='border-2 text-center'>
-                  {roundNumber(order.ca)}
-                </div>
-                <div className='border-2 text-center'>
-                {roundNumber(order.val)}
-                </div>
-                <div className='border-2 border-r-0 text-center'>
-                  {order.co}
-                </div>
-              </div>
-          })
-    
-        }
-       </div>  
-    </div> :  orders.errors?.map( (error: string,index: number) => {
-              return <h2 className='text-center mt-5' key={index}> { error }</h2>
-            })}
+    <COrderTable orders={orders} formik={formik} />
     
     </section>;
 };
